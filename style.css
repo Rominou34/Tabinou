@@ -53,6 +53,15 @@ body {
   background-color: #191919;
 }
 
+#links_container > a.light {
+  background-color: #d7d7d7;
+  color: #141414;
+}
+
+#links_container > a.light:hover {
+  background-color: #676767;
+}
+
 #links_container > a.blue { border-color: #2c3eb9; }
 #links_container > a.cyan { border-color: #36a2cb; }
 #links_container > a.green { border-color: #25b340; }
