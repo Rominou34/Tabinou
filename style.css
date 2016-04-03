@@ -1,6 +1,5 @@
 html, body {
   width: 100%;
-  min-height: 100vh;
   margin: 0px;
   padding: 0px;
   color: #ecf0f1;
@@ -15,6 +14,7 @@ html, body, p, div, h1, h2, h3, h4, h5, h6, a {
 }
 
 html {
+  height: 100vh;
   background-image: url(img/plane1.jpg);
   background-position: center;
   background-clip: border-box;
@@ -24,6 +24,7 @@ html {
 
 body {
   background-color: rgba(0,0,0,0.8);
+  min-height: 100vh;
 }
 
 /***** LINKS *****/
