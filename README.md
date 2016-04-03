@@ -17,5 +17,5 @@ This is my personal Chrome start page, still not finished tho
 
 ## TODO
 
-* Use the GitHub API to get the news and the org's repos ( it's currently coming from a local variable for tests purpose )
 * Display the GitHub API rate limit status ( how many requests you have )
+* Give the ability to follow a user ( display recent GitHub events )

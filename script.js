@@ -14,16 +14,11 @@ window.onload = function() {
     googleSearch(search.value);
   });
 
-  for(var o in config.organizations) {
-    var block = document.createElement("div");
-    block.classList.add("github_repos");
-    block.classList.add("org_repos");
-    git_global_container.appendChild(block);
-    parseOrgsRepos(block, org, config.organizations[o]);
-  }
-
+  /*
+  * Displaying the user's repos
+  */
   var req_user = new XMLHttpRequest();
-  var url = 'https://api.github.com/users/'+
+  var url_user = 'https://api.github.com/users/'+
   config.user+'/repos?sort=pushed&per_page='+
   config.user_repos_count;
   req_user.onreadystatechange = function() {
@@ -35,29 +30,39 @@ window.onload = function() {
         parseOrgsRepos(block, JSON.parse(req_user.responseText), config.user);
       }
   };
-  req_user.open("GET", url, true);
+  req_user.open("GET", url_user, true);
   req_user.send();
 
-
-  /*var req_user = new XMLHttpRequest();
-  req_user.onreadystatechange = function() {
-      if (req_user.readyState == 4 && req_user.status == 200) {
-        parseUserRepos(JSON.parse(req_user.responseText));
-      }
-  };
-  req_user.open("GET", url_user_repos, true);
-  req_user.send();
-
+  /*
+  * Displaying the org's repos
+  */
   var req_org = new XMLHttpRequest();
+  var url_org = 'https://api.github.com/orgs/'+
+  config.org+'/repos?sort=pushed&per_page='+
+  config.org_repos_count;
   req_org.onreadystatechange = function() {
       if (req_org.readyState == 4 && req_org.status == 200) {
-        parseUserRepos(JSON.parse(req_org.responseText));
+        var block = document.createElement("div");
+        block.classList.add("github_repos");
+        block.classList.add("org_repos");
+        git_global_container.appendChild(block);
+        parseOrgsRepos(block, JSON.parse(req_org.responseText), config.org);
       }
   };
-  req_org.open("GET", url_org_repos, true);
-  req_org.send();*/
+  req_org.open("GET", url_org, true);
+  req_org.send();
 
-  parseEvents(events);
+  var req_news = new XMLHttpRequest();
+  var url_news = 'https://api.github.com/users/'+config.self+'/received_events';
+  req_news.onreadystatechange = function() {
+      if (req_news.readyState == 4 && req_news.status == 200) {
+        parseEvents(JSON.parse(req_news.responseText));
+      }
+  };
+  req_news.open("GET", url_news, true);
+  req_news.send();
+
+  //parseEvents(events);
 }
 
 /*
