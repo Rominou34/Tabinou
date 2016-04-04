@@ -2,8 +2,7 @@ var url_user_repos ='https://api.github.com/users/'+config.username+'/repos?sort
 var url_org_repos ='https://api.github.com/orgs/'+config.organization+'/repos?sort=pushed';
 var url_star_repos = 'https://api.github.com/users/'+config.username+'/starred';
 
-var git_global_container, git_user_repos, git_org_repos, git_events, google;
-
+var git_global_container, git_user_repos, git_org_repos, git_events, google, refused;
 window.onload = function() {
   git_global_container = document.querySelector("#github_container");
 
@@ -62,7 +61,7 @@ window.onload = function() {
   req_news.open("GET", url_news, true);
   req_news.send();
 
-  //parseEvents(events);
+  checkAPI();
 }
 
 /*
@@ -153,13 +152,42 @@ function googleSearch(query) {
   location.assign("http://www.google.com/search?q="+s);
 }
 
+/*
+* Clean the date so it's easy to read for humans
+*/
 function cleanDate(date) {
   var d = date.replace(/T/g," at ");
   return d.slice(0,19);
 }
 
+/*
+* Convert repos API links to casual GitHub links
+*/
 function cleanLink(link) {
   var l = link.replace('api.','');
   var l1 = l.replace('users/','');
   return l1.replace('repos/','');
+}
+
+/*
+* Checks the API status
+*/
+function checkAPI() {
+  var apiUrl = 'https://api.github.com/rate_limit';
+
+  var req_api = new XMLHttpRequest();
+  req_api.onreadystatechange = function() {
+      if (req_api.readyState == 4 && req_api.status == 200) {
+        var resp = JSON.parse(req_api.responseText);
+        var githubRate = document.getElementById("github_rate");
+        githubRate.innerHTML = "GitHub API: <b>" +
+        resp.resources.core.remaining + "</b> requests remaining";
+      }
+      if (req_api.status == 403) {
+        var resp = JSON.parse(req_api.responseText);
+        console.log(resp.message);
+      }
+  };
+  req_api.open("GET", apiUrl, true);
+  req_api.send();
 }
